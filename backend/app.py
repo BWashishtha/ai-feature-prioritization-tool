@@ -4,15 +4,18 @@ import requests
 from flask_cors import CORS
 from dotenv import load_dotenv
 import json
-
+from openai import OpenAI
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 CORS(app, origins="*", supports_credentials=True, methods=["GET", "POST", "OPTIONS"])
 # Read OpenRouter API key
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENROUTER_API_KEY")
+)
 @app.route('/api/prioritize', methods=['POST'])
 @app.route('/api/prioritize', methods=['POST'])
 def prioritize():
