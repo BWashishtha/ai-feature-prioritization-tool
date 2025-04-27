@@ -8,7 +8,7 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-
+CORS(app, origins="*", supports_credentials=True, methods=["GET", "POST", "OPTIONS"])
 # Read OpenRouter API key
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
