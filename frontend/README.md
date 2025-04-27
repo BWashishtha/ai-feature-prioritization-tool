@@ -45,9 +45,9 @@ npm install
 npm run dev
 ```
 🌍 Live Deployment
-🔗 Frontend: Vercel Live Link - Coming Soon
+🔗 Frontend: Vercel Live Link - (https://ai-feature-prioritization-tool.vercel.app/)
 
-🔗 Backend: Render Live Link - Coming Soon
+🔗 Backend: Render Live Link - (https://ai-feature-prioritization-tool.onrender.com)
 
 🚀 Future Improvements
 Export prioritized features to .csv format
