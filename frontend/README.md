@@ -1,12 +1,57 @@
-# React + Vite
+# 🛠️ AI Feature Prioritization Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack AI-powered web app that helps early-stage startups, product managers, and founders prioritize user feature requests.  
+It uses LLMs (via OpenRouter API) to automatically categorize features based on **Impact** and **Effort**, saving valuable time in product decision-making.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Key Features
 
-## Expanding the ESLint configuration
+- 📋 Submit multiple user feature requests
+- 🚀 AI categorizes features into:
+  - High Impact / Low Effort
+  - High Impact / High Effort
+  - Low Impact / Low Effort
+  - Low Impact / High Effort
+- ♻️ Reset all fields with one click
+- ⬇️ Download prioritized results as a `.txt` file
+- 📱 Fully mobile-responsive design
+- 🔥 Fast, smooth user experience with React + TailwindCSS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React.js, Vite, TailwindCSS, React Toastify, React Spinners
+- **Backend:** Flask (Python), OpenRouter AI API
+- **Deployment:** 
+  - Backend hosted on Render.com
+  - Frontend hosted on Vercel.com
+
+---
+
+## 🛎️ How to Run Locally
+
+### 1. Clone the Repo
+
+```bash
+git clone https://github.com/BWashishtha/ai-feature-prioritization-tool.git
+cd ai-feature-prioritization-tool
+cd backend
+pip install -r requirements.txt
+python app.py
+cd frontend
+npm install
+npm run dev
+```
+🌍 Live Deployment
+🔗 Frontend: Vercel Live Link - Coming Soon
+
+🔗 Backend: Render Live Link - Coming Soon
+
+🚀 Future Improvements
+Export prioritized features to .csv format
+Weight features based on user votes or impact scores
+Visualize feature prioritization in a 2x2 Impact vs Effort quadrant chart
+Add basic user authentication for saving prioritization sessions
+
