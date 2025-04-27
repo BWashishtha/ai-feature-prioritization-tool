@@ -53,7 +53,7 @@ Features:
         reply = response.choices[0].message.content
         cleaned_reply = extract_json(reply)
         parsed_reply = json.loads(cleaned_reply)
-
+        return jsonify(parsed_reply)
     except Exception as e:
         print("🔴 Exception:", str(e))
         return jsonify({"error": "Failed to parse AI response", "details": str(e)}), 500
