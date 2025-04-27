@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PuffLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 function App() {
   const [features, setFeatures] = useState([""]);
@@ -120,7 +120,7 @@ function App() {
           domain={[1, 5]}
           tickCount={5}
         >
-          <Label value="Effort (1=Low, 5=High)" position="insideBottom" dy={20} />
+          <label value="Effort (1=Low, 5=High)" position="insideBottom" dy={20} />
         </XAxis>
         <YAxis
           type="number"
@@ -129,7 +129,7 @@ function App() {
           domain={[1, 5]}
           tickCount={5}
         >
-          <Label value="Impact (1=Low, 5=High)" angle={-90} position="insideLeft" dx={-10} />
+          <label value="Impact (1=Low, 5=High)" angle={-90} position="insideLeft" dx={-10} />
         </YAxis>
 
         {/* Quadrant Dividers */}
