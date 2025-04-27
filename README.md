@@ -47,10 +47,8 @@ npm run dev
 🌍 Live Deployment
 🔗 Frontend: Vercel Live Link - (https://ai-feature-prioritization-tool.vercel.app/)
 
-🔗 Backend: Render Live Link - (https://ai-feature-prioritization-tool.onrender.com)
-
+🔗 Backend: Railway Live Link - https://ai-feature-prioritization-tool-production.up.railway.app/
 🚀 Future Improvements
 Export prioritized features to .csv format
 Weight features based on user votes or impact scores
-Visualize feature prioritization in a 2x2 Impact vs Effort quadrant chart
 Add basic user authentication for saving prioritization sessions
