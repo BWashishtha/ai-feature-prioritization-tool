@@ -3,6 +3,7 @@ import os
 import requests
 from flask_cors import CORS
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -13,37 +14,44 @@ CORS(app, origins="*", supports_credentials=True, methods=["GET", "POST", "OPTIO
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 @app.route('/api/prioritize', methods=['POST'])
-def prioritize_features():
-    data = request.json
+@app.route('/api/prioritize', methods=['POST'])
+def prioritize():
+    data = request.get_json()
     features = data.get('features', [])
 
-    if not features:
-        return jsonify({'error': 'No features provided'}), 400
+    prompt = f"""
+You are an experienced product manager.
 
-    prompt = generate_prompt(features)
+Given the following list of feature requests, estimate for each:
+- Effort on a scale of 1 (very low) to 5 (very high)
+- Impact on a scale of 1 (very low) to 5 (very high)
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:3000/",   #we'll connect frontend on 3000
-        "X-Title": "AI Feature Prioritization Tool"
-    }
+Output strictly in the following JSON format:
+[
+  {{ "feature": "Feature Name", "effort": number, "impact": number }},
+  ...
+]
 
-    body = {
-        "model": "openai/gpt-3.5-turbo",  # You can also try anthropic/claude-3-haiku
-        "messages": [
-            {"role": "system", "content": "You are a senior Product Manager."},
+Features:
+{features}
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # or your current OpenRouter model
+        messages=[
+            {"role": "system", "content": "You are a helpful product management assistant."},
             {"role": "user", "content": prompt}
         ]
-    }
+    )
 
+    reply = response.choices[0].message.content
+
+    # Parse the AI's JSON output
     try:
-        response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=body)
-        response_data = response.json()
-        ai_output = response_data['choices'][0]['message']['content']
-        return jsonify({'result': ai_output})
+        parsed_reply = json.loads(reply)
+        return jsonify(parsed_reply)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": "Failed to parse AI response", "details": str(e)}), 500
 
 def generate_prompt(features):
     feature_list = "\n".join(f"- {f}" for f in features)
