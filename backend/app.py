@@ -5,6 +5,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import json
 from openai import OpenAI
+import re
 load_dotenv()
 
 app = Flask(__name__)
@@ -50,8 +51,8 @@ Features:
         print("🔵 Raw AI response:", response)
 
         reply = response.choices[0].message.content
-        parsed_reply = json.loads(reply)
-        return jsonify(parsed_reply)
+        cleaned_reply = extract_json(reply)
+        parsed_reply = json.loads(cleaned_reply)
 
     except Exception as e:
         print("🔴 Exception:", str(e))
@@ -96,6 +97,10 @@ Features:
 #         return jsonify(parsed_reply)
 #     except Exception as e:
 #         return jsonify({"error": "Failed to parse AI response", "details": str(e)}), 500
+def extract_json(text):
+    # Remove ```json and ``` markers if present
+    cleaned = re.sub(r"^```json\s*|```$", "", text.strip(), flags=re.MULTILINE)
+    return cleaned
 
 def generate_prompt(features):
     feature_list = "\n".join(f"- {f}" for f in features)
