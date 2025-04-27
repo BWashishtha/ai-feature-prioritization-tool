@@ -2,10 +2,11 @@ import { useState } from "react";
 import { PuffLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function App() {
   const [features, setFeatures] = useState([""]);
-  const [result, setResult] = useState("");
+  const [prioritizedFeatures, setPrioritizedFeatures] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (index, value) => {
@@ -33,7 +34,7 @@ function App() {
 
       const data = await response.json();
       if (response.ok) {
-        setResult(data.result);
+        setResult(setPrioritizedFeatures(data));
         toast.success("✅ Successfully prioritized features!");
       } else {
         console.error("Error:", data.error);
@@ -105,27 +106,63 @@ function App() {
         </div>
       )}
 
-{result && (
-  <div className="mt-12 w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg flex flex-col items-center">
-    <h2 className="text-2xl font-bold mb-4 text-gray-700">📋 Prioritized Features:</h2>
-    <pre className="whitespace-pre-wrap text-gray-600 w-full">{result}</pre>
+{prioritizedFeatures.length > 0 && (
+  <div style={{ width: '100%', height: 500, marginTop: '2rem' }}>
+    <ResponsiveContainer>
+      <ScatterChart
+        margin={{ top: 40, right: 20, bottom: 40, left: 20 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          type="number"
+          dataKey="effort"
+          name="Effort"
+          domain={[1, 5]}
+          tickCount={5}
+        >
+          <Label value="Effort (1=Low, 5=High)" position="insideBottom" dy={20} />
+        </XAxis>
+        <YAxis
+          type="number"
+          dataKey="impact"
+          name="Impact"
+          domain={[1, 5]}
+          tickCount={5}
+        >
+          <Label value="Impact (1=Low, 5=High)" angle={-90} position="insideLeft" dx={-10} />
+        </YAxis>
 
-    <button
-      onClick={() => {
-        const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'prioritized_features.txt';
-        link.click();
-        URL.revokeObjectURL(url);
-      }}
-      className="mt-6 px-5 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition transform hover:scale-105"
-    >
-      ⬇️ Download Results
-    </button>
+        {/* Quadrant Dividers */}
+        <ReferenceLine x={3} stroke="gray" strokeDasharray="3 3" />
+        <ReferenceLine y={3} stroke="gray" strokeDasharray="3 3" />
+
+        {/* Tooltips */}
+        <Tooltip cursor={{ strokeDasharray: '3 3' }} content={({ active, payload }) => {
+          if (active && payload && payload.length) {
+            const { feature, effort, impact } = payload[0].payload;
+            return (
+              <div style={{ background: 'white', border: '1px solid #ccc', padding: '10px' }}>
+                <p><strong>{feature}</strong></p>
+                <p>Effort: {effort}</p>
+                <p>Impact: {impact}</p>
+              </div>
+            );
+          }
+          return null;
+        }} />
+
+        {/* Features */}
+        <Scatter
+          name="Features"
+          data={prioritizedFeatures}
+          fill="#8884d8"
+          animationDuration={800}
+        />
+      </ScatterChart>
+    </ResponsiveContainer>
   </div>
 )}
+
   <div className="mt-12 text-gray-500 text-sm">
   <p>Made with ❤️ by BW</p>
   <p>Powered by OpenAI</p>
