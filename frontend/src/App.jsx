@@ -34,7 +34,7 @@ function App() {
 
       const data = await response.json();
       if (response.ok) {
-        setResult(setPrioritizedFeatures(data));
+        setPrioritizedFeatures(data);
         toast.success("✅ Successfully prioritized features!");
       } else {
         console.error("Error:", data.error);
